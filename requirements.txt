@@ -1,0 +1,12 @@
+streamlit
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
+chromadb
+openai
+sentence-transformers
+pypdf
+python-dotenv
+docx2txt
+rank_bm25
