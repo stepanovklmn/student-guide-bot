@@ -1,29 +1,28 @@
-name: Keep Streamlit App Awake (Playwright)
+name: Keep Streamlit App Awake
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */8 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  keepalive:
+  keep-alive:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Playwright and Chromium
+      - name: Configure git
         run: |
-          pip install playwright
-          playwright install chromium --with-deps
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Run keep-alive script
-        run: python scripts/keepalive.py
-        env:
-          APP_URL: ${{ secrets.STREAMLIT_APP_URL }}
+      - name: Create empty commit and push
+        run: |
+          git commit --allow-empty -m "chore: keep Streamlit app alive [skip ci]"
+          git push
